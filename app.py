@@ -14,8 +14,13 @@ def get_new_reviews():
     headers = {
         "Authorization": WB_API_KEY
     }
-    response = requests.get(url, headers=headers)
-    return response.json().get("data", [])
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        return response.json().get("data", [])
+    except Exception as e:
+        print(f"[Ошибка запроса к WB API]: {e}")
+        return []
 
 def generate_response(review_text, user_name):
     prompt = f"""
@@ -44,6 +49,8 @@ def post_response(review_id, text):
 def main_loop():
     while True:
         reviews = get_new_reviews()
+        if not reviews:
+            print("Нет новых отзывов или ошибка получения данных.")
         for review in reviews:
             if not review.get("response"):
                 user_name = review.get("userName", "Покупатель")
