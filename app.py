@@ -77,4 +77,7 @@ def main_loop():
         time.sleep(60)
 
 if __name__ == "__main__":
-    main_loop()
+    review_text = "Костюм очень понравился, ткань приятная, но швы немного топорные."
+    user_name = "Татьяна"
+    response_text = generate_response(review_text, user_name)
+    print(f"Сгенерированный ответ: {response_text}")
